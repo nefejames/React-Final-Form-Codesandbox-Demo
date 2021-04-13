@@ -2,40 +2,6 @@ import Head from "next/head";
 import { Form, Field } from "react-final-form";
 import styles from "../styles/styles.module.scss";
 
-import { Validators } from "@lemoncode/fonk";
-import { createFinalFormValidation } from "@lemoncode/fonk-final-form";
-
-const validationSchema = {
-  field: {
-    email: [
-      {
-        validator: Validators.required,
-        message: "Required",
-      },
-    ],
-    select: [
-      {
-        validator: Validators.required,
-        message: "Required",
-      },
-    ],
-    checkbox: [
-      {
-        validator: Validators.required,
-        message: "Required",
-      },
-    ],
-    radio: [
-      {
-        validator: Validators.required,
-        message: "Required",
-      },
-    ],
-  },
-};
-
-const formValidation = createFinalFormValidation(validationSchema);
-
 const onSubmit = (values) => {
   alert(JSON.stringify(values));
 };
