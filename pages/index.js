@@ -1,65 +1,161 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import { Form, Field } from "react-final-form";
+import styles from "../styles/styles.module.scss";
 
-export default function Home() {
+import { Validators } from "@lemoncode/fonk";
+import { createFinalFormValidation } from "@lemoncode/fonk-final-form";
+
+const validationSchema = {
+  field: {
+    email: [
+      {
+        validator: Validators.required,
+        message: "Required",
+      },
+    ],
+    select: [
+      {
+        validator: Validators.required,
+        message: "Required",
+      },
+    ],
+    checkbox: [
+      {
+        validator: Validators.required,
+        message: "Required",
+      },
+    ],
+    radio: [
+      {
+        validator: Validators.required,
+        message: "Required",
+      },
+    ],
+  },
+};
+
+const formValidation = createFinalFormValidation(validationSchema);
+
+const onSubmit = (values) => {
+  alert(JSON.stringify(values));
+};
+
+const validate = (values) => {
+  const errors = {};
+  if (!values.email) {
+    errors.email = "Email is Required";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
+    errors.email = "Invalid emaill address";
+  }
+  if (!values.checkbox) {
+    errors.checkbox = "You must accept our terms";
+  }
+  if (!values.select) {
+    errors.select = "Select is required";
+  }
+  if (!values.radio) {
+    errors.radio = "You must accept our terms";
+  }
+  return errors;
+};
+
+export default function App() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>React Final Form</title>
       </Head>
+      <Form
+        onSubmit={onSubmit}
+        validate={validate}
+        render={({ handleSubmit }) => (
+          <form onSubmit={handleSubmit}>
+            <Field name="email">
+              {({ input, meta }) => (
+                <div className={styles.formRow}>
+                  <label>Email</label>
+                  <input {...input} type="email" placeholder="Email" />
+                  {meta.error && meta.touched && (
+                    <span className={styles.error}>{meta.error}</span>
+                  )}
+                </div>
+              )}
+            </Field>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+            <Field name="select" component="select">
+              {({ input, meta }) => (
+                <div className={styles.formRow}>
+                  <label htmlFor="select">Select a color to continue</label>
+                  <select {...input}>
+                    <option value="" label="Select a color" />
+                    <option value="red" label="red" />
+                    <option value="blue" label="blue" />
+                    <option value="green" label="green" />
+                  </select>
+                  {meta.error && meta.touched && (
+                    <span className={styles.error} style={{ display: "block" }}>
+                      {meta.error}
+                    </span>
+                  )}
+                </div>
+              )}
+            </Field>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+            <Field name="checkbox">
+              {({ input, meta }) => (
+                <div className={styles.formRow}>
+                  <label>
+                    <input {...input} name="checkbox" type="checkbox" />
+                    Accept Terms & Conditions
+                  </label>
+                  {meta.error && meta.touched && (
+                    <span className={styles.error}>{meta.error}</span>
+                  )}
+                </div>
+              )}
+            </Field>
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+            <div className={styles.formRow}>
+              <Field
+                name="radio"
+                component="input"
+                type="radio"
+                value="Option 1"
+              >
+                {({ input, meta }) => (
+                  <div>
+                    <label>
+                      One
+                      <input {...input} type="radio" value="Option 1" />
+                    </label>
+                  </div>
+                )}
+              </Field>
+              <Field
+                name="radio"
+                component="input"
+                type="radio"
+                value="Option 2"
+              >
+                {({ input, meta }) => (
+                  <div>
+                    <label>
+                      Two
+                      <input {...input} type="radio" value="Option 2" />
+                    </label>
+                    {meta.error && meta.touched && (
+                      <span className={styles.error}>{meta.error}</span>
+                    )}
+                  </div>
+                )}
+              </Field>
+            </div>
+            <button type="submit" className={"disabled-btn"}>
+              Sign In
+            </button>
+          </form>
+        )}
+      />
     </div>
-  )
+  );
 }
